@@ -36,6 +36,8 @@ public class ListActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.list_view);
         mItems = new ArrayList<ListItem>();
 
+        mItems.add(new ListItem("Breaking Bad", "12.1"));
+
         registerForContextMenu(mListView);
 
         updateUI();
