@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -22,8 +23,8 @@ public class NewItemActivity extends AppCompatActivity {
         final EditText mTitleEditText  = (EditText) findViewById(R.id.title_input);
         final EditText mSeasonEditText = (EditText) findViewById(R.id.season_input);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        Button button = (Button) findViewById(R.id.add_button);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Check if the title and descriptions have text
@@ -36,11 +37,10 @@ public class NewItemActivity extends AppCompatActivity {
                     data.putExtra("newItem", newItem);
                     //Send the result back to the activity
                     setResult(Activity.RESULT_OK, data);
-                    //Finish this activity
                     finish();
                 } else {
                     //Show a message to the user
-                    Toast.makeText(NewItemActivity.this, "Please enter some text in the title and description fields",
+                    Toast.makeText(NewItemActivity.this, "Je hebt niet alles ingevuld!",
                             Toast.LENGTH_LONG).show();
                 }
             }

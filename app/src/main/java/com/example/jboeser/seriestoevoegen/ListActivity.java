@@ -1,11 +1,13 @@
 package com.example.jboeser.seriestoevoegen;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,8 +36,7 @@ public class ListActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.list_view);
         mItems = new ArrayList<ListItem>();
 
-        mItems.add(new ListItem("Breaking Bad", "2.10"));
-        mItems.add(new ListItem("Suits", "5.3"));
+        registerForContextMenu(mListView);
 
         updateUI();
 
@@ -59,6 +60,39 @@ public class ListActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        //Get the name of the clicked item
+        String clickedItem = (String) mListView.getItemAtPosition(info.position);
+        //Inflate the context menu from the resource file
+        getMenuInflater().inflate(R.menu.context_menu, menu);
+        //Find the delete MenuItem by its ID
+        MenuItem deleteButton = menu.findItem(R.id.context_menu_delete_item);
+        //Get the title from the menu button
+        String originalTitle = deleteButton.getTitle().toString();
+        //Make a new title combining the original title and the name of the clicked list item
+        deleteButton.setTitle(originalTitle + " '" + clickedItem + "'?");
+        super.onCreateContextMenu(menu, view, menuInfo);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //Check if the result code is the right one
+        if (resultCode == Activity.RESULT_OK) {
+            //Check if the request code is correct
+            if (requestCode == 1234) {
+                //Create a list item from the values
+                ListItem item = (ListItem) data.getSerializableExtra("newItem");
+                //Add the new item to the mAdapter;
+                mItems.add(item);
+                //Have the mAdapter update
+                updateUI();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     private void updateUI() {
         if (mAdapter == null) {
             mAdapter = new ItemAdapter(this, android.R.layout.simple_list_item_1, mItems);
@@ -71,13 +105,29 @@ public class ListActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_list, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        //Retrieve info about the long pressed list item
+        AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        if (item.getItemId() == R.id.context_menu_delete_item) {
+            //Remove the item from the list
+            mItems.remove(itemInfo.position);
+            //Update the adapter to reflect the list change
+            updateUI();
+            return true;
+        }
+        return super.onContextItemSelected(item);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_delete_item) {
+            mItems.clear();
+            updateUI();
             return true;
         }
         return super.onOptionsItemSelected(item);
