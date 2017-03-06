@@ -1,5 +1,6 @@
 package com.example.jboeser.seriestoevoegen;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +13,7 @@ import java.util.List;
 public class DetailsActivity extends AppCompatActivity {
 
     private ListView mListView;
+    private SeriesDataSource mDatasource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +22,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         TextView title  = (TextView) findViewById(R.id.activity_details_title);
         TextView season = (TextView) findViewById(R.id.activity_details_season);
+
 
         //Get the object from the intent
         ListItem clickedItem = (ListItem) getIntent().getSerializableExtra("clickedItem");
