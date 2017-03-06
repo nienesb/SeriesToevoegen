@@ -2,6 +2,7 @@ package com.example.jboeser.seriestoevoegen;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -25,6 +26,9 @@ public class ListActivity extends AppCompatActivity {
     private List<ListItem> mItems;
     private ListView mListView;
     private ArrayAdapter<ListItem> mAdapter;
+    private SeriesDataSource mDatasource;
+    private Cursor mCursor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +39,9 @@ public class ListActivity extends AppCompatActivity {
 
         mListView = (ListView) findViewById(R.id.list_view);
         mItems = new ArrayList<ListItem>();
-
-        mItems.add(new ListItem("Breaking Bad", "12.1"));
+        mDatasource = new SeriesDataSource(this);
 
         registerForContextMenu(mListView);
-
-        updateUI();
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -57,25 +58,31 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), NewItemActivity.class);
-                startActivityForResult(intent, 1234);
+//                System.out.println("hallo");return;
+                startActivity(intent);
             }
         });
+
+        mListView.setOnItemLongClickListener(new AdapterView.onItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                mDatasource.deleteSerie(id);
+                updateUi();
+                return true;
+            }
+        });
+
+        updateUi();
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        //Get the name of the clicked item
-        String clickedItem = (String) mListView.getItemAtPosition(info.position);
-        //Inflate the context menu from the resource file
-        getMenuInflater().inflate(R.menu.context_menu, menu);
-        //Find the delete MenuItem by its ID
-        MenuItem deleteButton = menu.findItem(R.id.context_menu_delete_item);
-        //Get the title from the menu button
-        String originalTitle = deleteButton.getTitle().toString();
-        //Make a new title combining the original title and the name of the clicked list item
-        deleteButton.setTitle(originalTitle + " '" + clickedItem + "'?");
-        super.onCreateContextMenu(menu, view, menuInfo);
+    private void updateUi() {
+        mCursor = mDatasource.getAllSeries();
+        if (mAdapter == null) {
+            mAdapter = new SeriesAdapter(this, mCursor);
+            mListView.setAdapter(mAdapter);
+        } else {
+            mAdapter.changeCursor(mCursor);
+        }
     }
 
     @Override
@@ -89,19 +96,16 @@ public class ListActivity extends AppCompatActivity {
                 //Add the new item to the mAdapter;
                 mItems.add(item);
                 //Have the mAdapter update
-                updateUI();
+                updateUi();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void updateUI() {
-        if (mAdapter == null) {
-            mAdapter = new ItemAdapter(this, android.R.layout.simple_list_item_1, mItems);
-            mListView.setAdapter(mAdapter);
-        } else {
-            mAdapter.notifyDataSetChanged();
-        }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mCursor.close();
     }
 
     @Override
@@ -110,26 +114,27 @@ public class ListActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        //Retrieve info about the long pressed list item
         AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         if (item.getItemId() == R.id.context_menu_delete_item) {
             //Remove the item from the list
             mItems.remove(itemInfo.position);
             //Update the adapter to reflect the list change
-            updateUI();
+            updateUi();
             return true;
         }
         return super.onContextItemSelected(item);
     }
 
+    // deleting all items
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_delete_item) {
             mItems.clear();
-            updateUI();
+            updateUi();
             return true;
         }
         return super.onOptionsItemSelected(item);

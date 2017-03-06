@@ -1,5 +1,9 @@
 <resources>
-    <string name="app_name">Series Toevoegen</string>
+    <string name="app_name">Series</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_new_item">NewItemActivity</string>
+    <string name="title">Titel</string>
+    <string name="entertitle">Voer titel in...</string>
+    <string name="season">Seizoen</string>
+    <string name="enterseason">Voer seizoen en aflevering in...</string>
 </resources>

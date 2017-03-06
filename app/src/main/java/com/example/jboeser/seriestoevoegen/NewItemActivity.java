@@ -3,10 +3,7 @@ package com.example.jboeser.seriestoevoegen;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -15,10 +12,13 @@ import android.widget.Toast;
 
 public class NewItemActivity extends AppCompatActivity {
 
+    private SeriesDataSource mDatasource;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
+        mDatasource = new SeriesDataSource(this);
 
         final EditText mTitleEditText  = (EditText) findViewById(R.id.title_input);
         final EditText mSeasonEditText = (EditText) findViewById(R.id.season_input);
@@ -29,15 +29,12 @@ public class NewItemActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //Check if the title and descriptions have text
                 if (!TextUtils.isEmpty(mTitleEditText.getText()) && !TextUtils.isEmpty(mSeasonEditText.getText())) {
-                    String title = mTitleEditText.getText().toString();
-                    String season = mSeasonEditText.getText().toString();
-                    ListItem newItem = new ListItem(title, season);
-                    //Create a new intent with the entered data
-                    Intent data = new Intent();
-                    data.putExtra("newItem", newItem);
-                    //Send the result back to the activity
-                    setResult(Activity.RESULT_OK, data);
-                    finish();
+                    ListItem serie = new ListItem();
+                    serie.setTitle(mTitleEditText.getText().toString());
+                    serie.setSeason(mSeasonEditText.getText().toString());
+                    mDatasource.addSeries(serie);
+                    Intent intent = new Intent(NewItemActivity.this, ListActivity.class);
+                    startActivity(intent);
                 } else {
                     //Show a message to the user
                     Toast.makeText(NewItemActivity.this, "Je hebt niet alles ingevuld!",
