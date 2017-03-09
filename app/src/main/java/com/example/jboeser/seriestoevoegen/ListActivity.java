@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -25,7 +26,7 @@ public class ListActivity extends AppCompatActivity {
 
     private List<ListItem> mItems;
     private ListView mListView;
-    private ArrayAdapter<ListItem> mAdapter;
+    private CursorAdapter mAdapter;
     private SeriesDataSource mDatasource;
     private Cursor mCursor;
 
@@ -40,6 +41,8 @@ public class ListActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.list_view);
         mItems = new ArrayList<ListItem>();
         mDatasource = new SeriesDataSource(this);
+
+        updateUi();
 
         registerForContextMenu(mListView);
 
@@ -63,16 +66,15 @@ public class ListActivity extends AppCompatActivity {
             }
         });
 
-        mListView.setOnItemLongClickListener(new AdapterView.onItemLongClickListener() {
+        /*mListView.setOnItemLongClickListener(new AdapterView.onItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 mDatasource.deleteSerie(id);
                 updateUi();
                 return true;
             }
-        });
+        });*/
 
-        updateUi();
     }
 
     private void updateUi() {
