@@ -37,7 +37,7 @@ public class SeriesDataSource {
         ContentValues values = getContentValues(series);
 
         mDatabase.update(SeriesDBSchema.SeriesTable.NAME, values,
-                SeriesDBSchema.SeriesTable.Colums.ID + "=?",
+                SeriesDBSchema.SeriesTable.Colums._id + "=?",
                 new String[]{idString});
     }
 
@@ -59,7 +59,7 @@ public class SeriesDataSource {
     }
 
     public ListItem getSeriesById(long id) {
-        SeriesCursorWrapper cursor = querySeries(SeriesDBSchema.SeriesTable.Colums.ID + "=?",
+        SeriesCursorWrapper cursor = querySeries(SeriesDBSchema.SeriesTable.Colums._id + "=?",
                 new String[]{Long.toString(id)});
         try {
             if (cursor.getCount() == 0) {
@@ -76,7 +76,7 @@ public class SeriesDataSource {
         String idString = Long.toString(id);
 
         mDatabase.delete(SeriesDBSchema.SeriesTable.NAME,
-                SeriesDBSchema.SeriesTable.Colums.ID + "=?",
+                SeriesDBSchema.SeriesTable.Colums._id + "=?",
                 new String[]{idString});
     }
 }

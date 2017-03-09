@@ -14,7 +14,7 @@ public class SeriesCursorWrapper extends CursorWrapper {
     }
 
     public ListItem getSeries() {
-        long id = getLong(getColumnIndex(SeriesDBSchema.SeriesTable.Colums.ID));
+        long id = getLong(getColumnIndex(SeriesDBSchema.SeriesTable.Colums._id));
         String title = getString(getColumnIndex(SeriesDBSchema.SeriesTable.Colums.TITLE));
         String season = getString(getColumnIndex(SeriesDBSchema.SeriesTable.Colums.SEASON));
 

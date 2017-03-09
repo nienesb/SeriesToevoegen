@@ -19,11 +19,10 @@ public class SeriesBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table" + SeriesDBSchema.SeriesTable.NAME + "(" +
-                SeriesDBSchema.SeriesTable.Colums.ID + "integer primary key autoincrement, " +
-                SeriesDBSchema.SeriesTable.Colums.TITLE + "," +
-                SeriesDBSchema.SeriesTable.Colums.SEASON +
-                ")");
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + SeriesDBSchema.SeriesTable.NAME + "( " +
+                SeriesDBSchema.SeriesTable.Colums._id + " integer primary key autoincrement, " +
+                SeriesDBSchema.SeriesTable.Colums.TITLE + ", " +
+                SeriesDBSchema.SeriesTable.Colums.SEASON + " )");
     }
 
     @Override

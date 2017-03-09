@@ -10,7 +10,7 @@ public class SeriesDBSchema {
         public static final String NAME = "series";
 
         public static final class Colums {
-            public static final String ID = "id";
+            public static final String _id = "_id";
             public static final String TITLE = "title";
             public static final String SEASON = "season";
         }

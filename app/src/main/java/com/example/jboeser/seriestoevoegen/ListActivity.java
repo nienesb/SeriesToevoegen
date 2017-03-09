@@ -42,8 +42,6 @@ public class ListActivity extends AppCompatActivity {
         mItems = new ArrayList<ListItem>();
         mDatasource = new SeriesDataSource(this);
 
-        updateUi();
-
         registerForContextMenu(mListView);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -75,6 +73,7 @@ public class ListActivity extends AppCompatActivity {
             }
         });*/
 
+        updateUi();
     }
 
     private void updateUi() {
