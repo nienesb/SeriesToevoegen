@@ -29,6 +29,7 @@ public class ListActivity extends AppCompatActivity {
     private CursorAdapter mAdapter;
     private SeriesDataSource mDatasource;
     private Cursor mCursor;
+    private SeriesCursorWrapper cursorWrapper;
 
 
     @Override
@@ -48,8 +49,7 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(ListActivity.this, DetailsActivity.class);
-                ListItem clickedItem = (ListItem) parent.getItemAtPosition(position);
-                intent.putExtra("clickedItem", clickedItem);
+                intent.putExtra("_id", id);
                 startActivity(intent);
             }
         });
@@ -106,7 +106,6 @@ public class ListActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        mCursor.close();
     }
 
     @Override
@@ -129,15 +128,10 @@ public class ListActivity extends AppCompatActivity {
         return super.onContextItemSelected(item);
     }
 
-    // deleting all items
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_delete_item) {
+    public void deleteAllItems(){
+        if(mItems != null) {
             mItems.clear();
             updateUi();
-            return true;
         }
-        return super.onOptionsItemSelected(item);
     }
 }
