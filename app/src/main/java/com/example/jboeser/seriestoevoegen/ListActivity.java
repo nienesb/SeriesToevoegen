@@ -59,19 +59,9 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), NewItemActivity.class);
-//                System.out.println("hallo");return;
                 startActivity(intent);
             }
         });
-
-        /*mListView.setOnItemLongClickListener(new AdapterView.onItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                mDatasource.deleteSerie(id);
-                updateUi();
-                return true;
-            }
-        });*/
 
         updateUi();
     }
@@ -141,10 +131,14 @@ public class ListActivity extends AppCompatActivity {
         return super.onContextItemSelected(item);
     }
 
-    public void deleteAllItems(){
-        if(mItems != null) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_delete_item) {
             mItems.clear();
             updateUi();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 }

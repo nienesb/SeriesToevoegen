@@ -33,7 +33,7 @@
             android:id="@+id/season_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Seizoen en aflevering" />
+            android:hint="Seizoen en aflevering (b.v. 5.4)" />
 
         <Button
             android:id="@+id/add_button"

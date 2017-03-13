@@ -35,7 +35,7 @@ public class ListItem implements Serializable {
     }
 
     public String getSeason() {
-        return "Seizoen " + season;
+        return season;
     }
 
     public void setSeason(String season) {
