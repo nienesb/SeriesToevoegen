@@ -114,6 +114,19 @@ public class ListActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+        //Get the clicked item
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        //Inflate the context menu from the resource file
+        getMenuInflater().inflate(R.menu.context_menu, menu);
+        //Find the delete MenuItem by its ID
+        MenuItem deleteButton = menu.findItem(R.id.context_menu_delete_item);
+        //Get the title from the menu button
+        String originalTitle = deleteButton.getTitle().toString();
+        deleteButton.setTitle(originalTitle + "?");
+        super.onCreateContextMenu(menu, view, menuInfo);
+    }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
