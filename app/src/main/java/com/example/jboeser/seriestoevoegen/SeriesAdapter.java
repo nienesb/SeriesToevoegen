@@ -33,6 +33,6 @@ public class SeriesAdapter extends CursorAdapter {
         title.setText(serie.getTitle());
 
         TextView season = (TextView) view.findViewById(R.id.season);
-        season.setText(serie.getSeason());
+        season.setText("Seizoen " + serie.getSeason());
     }
 }

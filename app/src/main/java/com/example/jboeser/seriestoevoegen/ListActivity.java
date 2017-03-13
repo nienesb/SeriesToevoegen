@@ -1,8 +1,11 @@
 package com.example.jboeser.seriestoevoegen;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,6 +25,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.R.attr.id;
+
 public class ListActivity extends AppCompatActivity {
 
     private List<ListItem> mItems;
@@ -30,7 +35,6 @@ public class ListActivity extends AppCompatActivity {
     private SeriesDataSource mDatasource;
     private Cursor mCursor;
     private SeriesCursorWrapper cursorWrapper;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +64,15 @@ public class ListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), NewItemActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                mDatasource.deleteSerie(id);
+                updateUi();
+                return true;
             }
         });
 
@@ -119,23 +132,9 @@ public class ListActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        if (item.getItemId() == R.id.context_menu_delete_item) {
-            //Remove the item from the list
-            mItems.remove(itemInfo.position);
-            //Update the adapter to reflect the list change
-            updateUi();
-            return true;
-        }
-        return super.onContextItemSelected(item);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
         if (id == R.id.action_delete_item) {
-            mItems.clear();
+            mDatasource.deleteSerie(id);
             updateUi();
             return true;
         }

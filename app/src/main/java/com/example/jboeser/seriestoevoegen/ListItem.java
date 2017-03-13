@@ -13,9 +13,6 @@ public class ListItem implements Serializable {
     private String season;
 
     public ListItem() {
-        this.id = id;
-        this.title = this.title;
-        this.season = this.season;
     }
 
     public String getTitle() {
